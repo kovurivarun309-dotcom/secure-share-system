@@ -2,22 +2,133 @@
 <html>
 <head>
 
-<title>Secure Message</title>
+<title>Secure Content</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+img{
+pointer-events:none;
+user-select:none;
+}
+
+iframe{
+border:none;
+}
+
+/* block selection */
+body{
+user-select:none;
+}
+
+/* overlay layer to block iframe interaction */
+.block-layer{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:5;
+}
+
+.viewer-container{
+position:relative;
+}
+
+</style>
 
 </head>
 
-<body class="bg-black text-white flex items-center justify-center min-h-screen">
+<body class="bg-gradient-to-r from-purple-900 via-indigo-900 to-black min-h-screen flex items-center justify-center text-white">
 
-<div class="bg-gray-900 p-10 rounded-xl shadow-lg w-[500px]">
+<div class="bg-white/10 backdrop-blur-lg p-10 rounded-3xl shadow-2xl w-[750px] text-center border border-purple-500">
 
-<h2 class="text-2xl text-green-400 mb-4 text-center">
-🔓 Decrypted Message
+<h2 class="text-4xl font-bold text-green-400 mb-8">
+🔐 Secure Content
 </h2>
 
-<p class="text-lg text-center">{{ message }}</p>
+
+{% if message %}
+
+<div class="bg-black/40 p-6 rounded-xl mb-6 text-lg">
+{{ message }}
+</div>
+
+{% endif %}
+
+
+
+{% if file and type == "image" %}
+
+<div class="mb-6">
+
+<img src="/uploads/{{file}}" 
+class="rounded-xl mx-auto max-h-[500px] shadow-xl border border-white/20"
+draggable="false">
+
+<p class="mt-4 text-gray-300">
+Image can only be viewed once
+</p>
 
 </div>
+
+{% endif %}
+
+
+
+{% if file and type == "file" %}
+
+<div class="bg-black/40 p-6 rounded-xl">
+
+<p class="text-yellow-300 text-xl mb-4">
+📄 Secure File Preview
+</p>
+
+<div class="viewer-container">
+
+<iframe src="/uploads/{{file}}#toolbar=0&navpanes=0&scrollbar=0"
+class="w-full h-[500px] rounded-lg bg-white">
+</iframe>
+
+<div class="block-layer"></div>
+
+</div>
+
+<p class="text-red-400 mt-4 text-sm">
+File visible only once
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+
+<script>
+
+/* disable right click */
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+
+/* disable shortcuts */
+document.onkeydown = function(e){
+
+if(e.ctrlKey && e.key === "s") return false;
+if(e.ctrlKey && e.key === "p") return false;
+if(e.ctrlKey && e.key === "u") return false;
+if(e.key === "F12") return false;
+
+};
+
+/* disable drag */
+document.addEventListener("dragstart", function(e){
+e.preventDefault();
+});
+
+</script>
 
 </body>
 </html>

@@ -2,38 +2,92 @@
 <html>
 <head>
 <title>SecureShare</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
-<body class="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 min-h-screen flex items-center justify-center text-white">
+<body class="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 min-h-screen text-white">
 
-<div class="bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-[420px] border border-white/20">
+<div class="text-center pt-12">
+<h1 class="text-4xl font-bold text-cyan-300 mb-4">🔐 SecureShare</h1>
+<p class="text-gray-300">Secure message, image and file sharing</p>
+</div>
 
-<h1 class="text-3xl font-bold text-center mb-6 text-cyan-300">
-🔐 SecureShare
-</h1>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-12">
+
+<!-- MESSAGE -->
+
+<div class="bg-white/10 p-6 rounded-xl">
+<h2 class="text-xl font-bold text-green-300 mb-4">Secure Message</h2>
 
 <form action="/process" method="post">
 
-<label class="text-sm">Message</label>
+<textarea name="message"
+placeholder="Enter message"
+class="w-full p-3 rounded bg-black/30 mb-4"></textarea>
 
-<textarea name="message" required
-class="w-full p-3 mt-1 mb-4 rounded-lg bg-black/30 border border-gray-600"></textarea>
+<input type="password" name="password"
+placeholder="Create password"
+required
+class="w-full p-3 rounded bg-black/30 mb-4">
 
-<label class="text-sm">Create Password</label>
+<input type="hidden" name="type" value="message">
 
-<input type="password" name="password" required
-class="w-full p-3 mt-1 mb-6 rounded-lg bg-black/30 border border-gray-600">
-
-<button class="w-full bg-gradient-to-r from-purple-500 to-cyan-500 p-3 rounded-lg font-semibold hover:scale-105 transition">
-
-Generate Secure Link
-
+<button class="w-full bg-green-500 p-2 rounded">
+Generate Link
 </button>
 
 </form>
+</div>
+
+
+<!-- IMAGE -->
+
+<div class="bg-white/10 p-6 rounded-xl">
+<h2 class="text-xl font-bold text-pink-300 mb-4">Secure Image</h2>
+
+<form action="/process" method="post" enctype="multipart/form-data">
+
+<input type="file" name="file" accept="image/*"
+class="w-full p-3 rounded bg-black/30 mb-4">
+
+<input type="password" name="password"
+placeholder="Create password"
+required
+class="w-full p-3 rounded bg-black/30 mb-4">
+
+<input type="hidden" name="type" value="image">
+
+<button class="w-full bg-pink-500 p-2 rounded">
+Generate Link
+</button>
+
+</form>
+</div>
+
+
+<!-- FILE -->
+
+<div class="bg-white/10 p-6 rounded-xl">
+<h2 class="text-xl font-bold text-yellow-300 mb-4">Secure File</h2>
+
+<form action="/process" method="post" enctype="multipart/form-data">
+
+<input type="file" name="file"
+class="w-full p-3 rounded bg-black/30 mb-4">
+
+<input type="password" name="password"
+placeholder="Create password"
+required
+class="w-full p-3 rounded bg-black/30 mb-4">
+
+<input type="hidden" name="type" value="file">
+
+<button class="w-full bg-yellow-500 p-2 rounded">
+Generate Link
+</button>
+
+</form>
+</div>
 
 </div>
 

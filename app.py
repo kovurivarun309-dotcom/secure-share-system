@@ -1,79 +1,95 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import uuid
 import os
 from crypto_utils import hash_password
 
 app = Flask(__name__)
 
-# Temporary memory storage
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 data_store = {}
 
-# Home Page
+# Home page
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# Process message + password
+# Process sharing request
 @app.route("/process", methods=["POST"])
 def process():
 
     message = request.form.get("message")
     password = request.form.get("password")
+    share_type = request.form.get("type")
 
-    # If fields are empty reload page
-    if not message or not password:
+    file = request.files.get("file")
+
+    if not password:
         return render_template("index.html")
 
-    # Hash the password
     hashed = hash_password(password)
 
-    # Generate unique token
     token = str(uuid.uuid4())[:8]
 
-    # Store encrypted data
+    filename = None
+
+    if file and file.filename != "":
+        filename = token + "_" + file.filename
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_path)
+
     data_store[token] = {
         "message": message,
-        "password": hashed
+        "password": hashed,
+        "file": filename,
+        "type": share_type
     }
 
-    # Generate secure link
     link = f"/access/{token}"
 
     return render_template("processing.html", link=link)
 
 
-# Access secure message
+# Access shared content
 @app.route("/access/<token>", methods=["GET", "POST"])
 def access(token):
 
-    # If token doesn't exist
     if token not in data_store:
         return render_template("expired.html")
 
-    # When user submits password
+    data = data_store[token]
+
     if request.method == "POST":
 
         password = request.form.get("password")
         hashed = hash_password(password)
 
-        # Check password
-        if hashed == data_store[token]["password"]:
+        if hashed == data["password"]:
 
-            message = data_store[token]["message"]
+            message = data["message"]
+            file = data["file"]
+            share_type = data["type"]
 
-            # Delete after viewing (one-time view)
+            # One-time access
             del data_store[token]
 
-            return render_template("view.html", message=message)
+            return render_template(
+                "view.html",
+                message=message,
+                file=file,
+                type=share_type
+            )
 
     return render_template("access.html")
 
 
-# Run server
+# View uploaded files (not download)
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory("uploads", filename, as_attachment=False)
+
+
 if __name__ == "__main__":
-
-    # Render or hosting platforms provide PORT
-    port = int(os.environ.get("PORT", 5000))
-
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

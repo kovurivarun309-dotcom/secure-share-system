@@ -1,36 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<title>Processing</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body class="bg-black text-white flex items-center justify-center min-h-screen">
 
-<div class="bg-gray-900 p-10 rounded-xl shadow-xl w-[500px]">
+<div class="bg-gray-900 p-10 rounded-xl shadow-xl w-[500px] text-center">
 
-<h2 class="text-2xl mb-6 text-center text-cyan-400">
-Encryption Pipeline
-</h2>
+<h2 class="text-2xl text-cyan-400 mb-6">Security Pipeline</h2>
 
-<ul class="space-y-3 text-lg">
-
-<li class="text-green-400">✔ Password Hashing (SHA-256)</li>
-<li class="text-green-400">✔ AES Encryption</li>
-<li class="text-green-400">✔ RSA Key Generation</li>
-<li class="text-green-400">✔ Secure Link Generated</li>
-
+<ul class="space-y-2">
+<li>✔ Password Hashing (SHA-256)</li>
+<li>✔ AES Encryption</li>
+<li>✔ RSA Key Generation</li>
+<li>✔ Secure Link Generated</li>
 </ul>
 
-<div class="mt-6 text-center">
+<p class="mt-6">Share this link:</p>
 
-<p class="mb-3">Share this secure link:</p>
-
-<a class="text-cyan-400 underline text-lg" href="{{ link }}">{{ link }}</a>
-
-</div>
+<a class="text-cyan-400 underline" href="{{ link }}">
+{{ link }}
+</a>
 
 </div>
 
